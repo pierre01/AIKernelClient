@@ -23,7 +23,7 @@ public sealed class ApiKeyAuthHandler
         if (parts.Length == 2 && parts[0].Equals("Bearer", StringComparison.OrdinalIgnoreCase))
         {
             var token = parts[1];
-            var expected = Environment.GetEnvironmentVariable("MCP_API_KEY");
+            var expected = Environment.GetEnvironmentVariable("MCP_API_KEY", EnvironmentVariableTarget.User);
             if (!string.IsNullOrWhiteSpace(expected) && token == expected)
             {
                 var id = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, "chatgpt-connector") }, Scheme.Name);

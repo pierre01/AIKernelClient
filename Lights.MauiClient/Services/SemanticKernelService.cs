@@ -86,9 +86,9 @@ public class SemanticKernelService : ISemanticKernelService
             // ===== Attach MCP tools (choose transport by env) =====
             if (string.Equals(McpMode, "SSE", StringComparison.OrdinalIgnoreCase))
             {
-                
+
                 // usage
-                var token = Environment.GetEnvironmentVariable("MCP_CLIENT_TOKEN")!;
+                var token = Environment.GetEnvironmentVariable("MCP_API_KEY", EnvironmentVariableTarget.User);
                 var http = new HttpClient(new BearerHandler(token)) { BaseAddress = new Uri("https://localhost:3001/mcp/") };
 
 

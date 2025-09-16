@@ -9,6 +9,7 @@ using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.SemanticKernel.Extensions;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace AIKernelClient.Services;
@@ -85,11 +86,16 @@ public class SemanticKernelService : ISemanticKernelService
             // ===== Attach MCP tools (choose transport by env) =====
             if (string.Equals(McpMode, "SSE", StringComparison.OrdinalIgnoreCase))
             {
-                // Default: start the MCP server locally via SSE and bind its tools
-                // Connect to a running http  server 
+                
+                // usage
+                var token = Environment.GetEnvironmentVariable("MCP_CLIENT_TOKEN")!;
+                var http = new HttpClient(new BearerHandler(token)) { BaseAddress = new Uri("https://localhost:3001/mcp/") };
+
+
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
                     serverName: "Lights.McpServer",
-                    endpoint: "https://localhost:3001/");
+                    endpoint: "https://localhost:3001/mcp/",
+                    httpClient: http);
             }
             else
             {
